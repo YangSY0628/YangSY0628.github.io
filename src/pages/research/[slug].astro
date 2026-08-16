@@ -1,0 +1,79 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SocialIcon from "../../components/SocialIcon.astro";
+import { highlights, profile } from "../../data/site";
+
+export function getStaticPaths() {
+  return highlights.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+type Project = (typeof highlights)[number];
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const pageDescription = `${project.title} — ${project.description}`;
+---
+
+<BaseLayout title={`${project.title} — ${profile.name}`} description={pageDescription}>
+  <header class="project-header shell">
+    <a class="back-link" href="/#highlights">← Back to highlights</a>
+    <a class="project-wordmark" href="/">{profile.name}</a>
+  </header>
+
+  <main class="project-page shell">
+    <section class="project-hero" aria-labelledby="project-title">
+      <p class="eyebrow">{project.eyebrow}</p>
+      <h1 id="project-title">{project.title}</h1>
+      <p>{project.description}</p>
+    </section>
+
+    <figure class="project-video">
+      <video controls playsinline preload="metadata" poster={project.poster}>
+        <source src={project.fullVideo} type="video/mp4" />
+      </video>
+      <figcaption>Full project video</figcaption>
+    </figure>
+
+    <div class="project-content">
+      <section aria-labelledby="overview-title">
+        <p class="section-label">Overview</p>
+        <h2 id="overview-title">About this work</h2>
+        <p>
+          A detailed introduction covering the research problem, methodology, experiments, and key findings
+          is being prepared.
+        </p>
+      </section>
+
+      <aside class="project-resources" aria-labelledby="resources-title">
+        <p class="section-label">Resources</p>
+        <h2 id="resources-title">Project links</h2>
+        <ul>
+          <li><span>Paper</span><small>Coming soon</small></li>
+          <li><span>Code</span><small>Coming soon</small></li>
+          <li><span>Publication details</span><small>Coming soon</small></li>
+        </ul>
+      </aside>
+    </div>
+
+    <section class="project-contact" aria-labelledby="project-contact-title">
+      <div>
+        <p class="section-label">Contact</p>
+        <h2 id="project-contact-title">Interested in this work?</h2>
+      </div>
+      <a href={`mailto:${profile.email}`}>
+        {profile.email} <SocialIcon name="arrow" />
+      </a>
+    </section>
+  </main>
+
+  <footer class="shell">
+    <p>© {new Date().getFullYear()} {profile.name}</p>
+    <p>Built with Astro · Hosted on GitHub Pages</p>
+  </footer>
+</BaseLayout>
