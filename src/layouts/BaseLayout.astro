@@ -4,9 +4,11 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description: string;
+  titleZh?: string;
+  descriptionZh?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, titleZh = title, descriptionZh = description } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -16,7 +18,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
+    <meta
+      name="description"
+      content={description}
+      data-i18n-content
+      data-en={description}
+      data-zh={descriptionZh}
+    />
     <meta name="theme-color" content="#f5f3ed" />
     <link rel="canonical" href={canonicalURL} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -27,12 +35,18 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       rel="stylesheet"
     />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={title} data-i18n-content data-en={title} data-zh={titleZh} />
+    <meta
+      property="og:description"
+      content={description}
+      data-i18n-content
+      data-en={description}
+      data-zh={descriptionZh}
+    />
     <meta property="og:url" content={canonicalURL} />
     <title>{title}</title>
   </head>
-  <body>
+  <body data-title-en={title} data-title-zh={titleZh}>
     <slot />
   </body>
 </html>

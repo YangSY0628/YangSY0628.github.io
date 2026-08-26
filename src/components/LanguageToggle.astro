@@ -1,0 +1,77 @@
+<div
+  class="language-switch"
+  role="group"
+  aria-label="Language selection"
+  data-i18n-aria
+  data-aria-en="Language selection"
+  data-aria-zh="语言选择"
+>
+  <button type="button" data-language-option="en" aria-pressed="true">EN</button>
+  <button type="button" data-language-option="zh" aria-pressed="false">中文</button>
+</div>
+
+<script>
+  type Language = "en" | "zh";
+
+  function readSavedLanguage(): Language | null {
+    try {
+      const savedLanguage = localStorage.getItem("siteLanguage");
+      return savedLanguage === "en" || savedLanguage === "zh" ? savedLanguage : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function saveLanguage(language: Language) {
+    try {
+      localStorage.setItem("siteLanguage", language);
+    } catch {
+      // Continue without persistence when storage is unavailable.
+    }
+  }
+
+  function applyLanguage(language: Language) {
+    document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
+    document.documentElement.dataset.language = language;
+
+    document.querySelectorAll<HTMLElement>("[data-i18n]").forEach((element) => {
+      const translation = language === "zh" ? element.dataset.zh : element.dataset.en;
+      if (translation !== undefined) element.textContent = translation;
+    });
+
+    document.querySelectorAll<HTMLElement>("[data-i18n-aria]").forEach((element) => {
+      const translation = language === "zh" ? element.dataset.ariaZh : element.dataset.ariaEn;
+      if (translation !== undefined) element.setAttribute("aria-label", translation);
+    });
+
+    document.querySelectorAll<HTMLImageElement>("[data-i18n-alt]").forEach((image) => {
+      const translation = language === "zh" ? image.dataset.altZh : image.dataset.altEn;
+      if (translation !== undefined) image.alt = translation;
+    });
+
+    document.querySelectorAll<HTMLButtonElement>("[data-language-option]").forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.languageOption === language));
+    });
+
+    const pageTitle = language === "zh" ? document.body.dataset.titleZh : document.body.dataset.titleEn;
+    if (pageTitle) document.title = pageTitle;
+
+    document.querySelectorAll<HTMLMetaElement>("[data-i18n-content]").forEach((meta) => {
+      const translation = language === "zh" ? meta.dataset.zh : meta.dataset.en;
+      if (translation !== undefined) meta.content = translation;
+    });
+
+    saveLanguage(language);
+  }
+
+  const savedLanguage = readSavedLanguage();
+  const browserLanguage: Language = navigator.language.toLowerCase().startsWith("zh") ? "zh" : "en";
+  applyLanguage(savedLanguage ?? browserLanguage);
+
+  document.querySelectorAll<HTMLButtonElement>("[data-language-option]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const language = button.dataset.languageOption;
+      if (language === "en" || language === "zh") applyLanguage(language);
+    });
+  });
+</script>

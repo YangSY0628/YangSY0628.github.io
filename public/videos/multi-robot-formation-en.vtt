@@ -1,0 +1,124 @@
+WEBVTT
+
+00:03.899 --> 00:05.166
+In this work,
+
+00:05.166 --> 00:07.533
+We proposed a vision-based decentralized relative
+
+00:07.533 --> 00:10.933
+ pose-estimation architecture based on GNNs.
+
+00:11.599 --> 00:15.500
+ Our key idea is the implicit virtual leader (IVL),
+
+00:15.533 --> 00:17.966
+ a non-physical formation reference frame implicitly
+
+00:17.966 --> 00:21.066
+ learned by the neural network from monocular images
+
+00:21.066 --> 00:23.100
+ and inter robot communication.
+
+00:24.933 --> 00:26.733
+Relying solely on visual input,
+
+00:26.733 --> 00:29.966
+ our network achieves relative-pose based formation control
+
+00:29.966 --> 00:33.100
+ without the need for any additional localization sensors.
+
+00:35.166 --> 00:36.766
+In our network architecture,
+
+00:36.799 --> 00:40.333
+ all robots operate as equal peers without a centralized hierarchy
+
+00:40.433 --> 00:43.066
+powered by decentralized edge inference.
+
+00:44.799 --> 00:48.766
+This enables zero latency, dynamic switching of the leader at any time.
+
+00:51.000 --> 00:53.299
+If any robot goes offline,
+
+00:53.299 --> 00:56.233
+ the remaining peer seamlessly maintain the formation.
+
+00:57.000 --> 00:59.700
+This eliminates the single-point-of-failure inherent
+
+00:59.700 --> 01:01.700
+in traditional leader-follower modes,
+
+01:01.700 --> 01:04.000
+ significantly boosting system reliability.
+
+01:13.500 --> 01:14.733
+Trained just once,
+
+01:14.733 --> 01:17.400
+our network can deployed across heterogeneous robots,
+
+01:17.400 --> 01:19.233
+ such as wheeled and quadruped robots,
+
+01:19.233 --> 01:21.633
+enabling zero-shot deployment.
+
+01:30.266 --> 01:32.500
+Even in the absence of visual overlap,
+
+01:32.500 --> 01:36.466
+our architecture maintains highly accurate relative pose estimation.
+
+01:40.966 --> 01:42.799
+When encountering obstacles,
+
+01:42.799 --> 01:48.633
+our network outputs reliable uncertainty estimation to guarantee formation safety.
+
+01:49.599 --> 01:51.400
+In this experiment,
+
+01:51.400 --> 01:54.099
+The blue RoboMaster automatically stops due to high uncertainty，
+
+01:54.099 --> 01:57.066
+while the other two adapt into a two-robot formation.
+
+02:02.833 --> 02:05.366
+Once the obstacle is removed,
+
+02:05.366 --> 02:09.300
+the re-online blue robot automatically resumes the collaborative formation.
+
+02:15.500 --> 02:18.199
+To validate the pose estimation accuracy，
+
+02:18.199 --> 02:23.199
+we demonstrate heterogeneous multi-robot formation switching through a narrow tunnel.
+
+02:24.266 --> 02:28.966
+With a tunnel width of only about 3 RoboMaster widths (0.72m),
+
+02:29.400 --> 02:33.066
+our method delivers a success rate close to 100%.
+
+02:34.633 --> 02:39.199
+Lastly, we demonstrate a 5-robot formation with low latency.
+
+02:40.966 --> 02:44.099
+In the future, we plan to extend this framework to achieve
+
+02:44.099 --> 02:47.400
+more complex multi-robot obstacle avoidance, planning and navigation,
+
+02:47.400 --> 02:50.266
+empowering multi-robot systems with ultimate resilience
+
+02:50.266 --> 02:52.800
+and seamless, cross-platform adaptability.

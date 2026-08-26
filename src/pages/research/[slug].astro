@@ -1,7 +1,9 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import LanguageToggle from "../../components/LanguageToggle.astro";
 import SocialIcon from "../../components/SocialIcon.astro";
 import { highlights, profile } from "../../data/site";
+import { zh } from "../../data/zh";
 
 export function getStaticPaths() {
   return highlights.map((project) => ({
@@ -16,55 +18,143 @@ interface Props {
   project: Project;
 }
 
-const { project } = Astro.props;
+const { project } = Astro.props as Props;
 const pageDescription = `${project.title} — ${project.description}`;
+const projectZh = zh.highlights[project.slug as keyof typeof zh.highlights];
 ---
 
-<BaseLayout title={`${project.title} — ${profile.name}`} description={pageDescription}>
+<BaseLayout
+  title={`${project.title} — ${profile.name}`}
+  description={pageDescription}
+  titleZh={`${projectZh.title} — ${zh.profile.name}`}
+  descriptionZh={`${projectZh.title} — ${projectZh.description}`}
+>
   <header class="project-header shell">
-    <a class="back-link" href="/#highlights">← Back to highlights</a>
-    <a class="project-wordmark" href="/">{profile.name}</a>
+    <a class="back-link" href="/#highlights">
+      <span data-i18n data-en="← Back to highlights" data-zh={zh.common.backToHighlights}>
+        ← Back to highlights
+      </span>
+    </a>
+    <div class="project-header-actions">
+      <a class="project-wordmark" href="/">
+        <span data-i18n data-en={profile.name} data-zh={zh.profile.name}>{profile.name}</span>
+      </a>
+      <LanguageToggle />
+    </div>
   </header>
 
   <main class="project-page shell">
     <section class="project-hero" aria-labelledby="project-title">
-      <p class="eyebrow">{project.eyebrow}</p>
-      <h1 id="project-title">{project.title}</h1>
-      <p>{project.description}</p>
+      <p class="eyebrow">
+        <span data-i18n data-en={project.eyebrow} data-zh={projectZh.eyebrow}>{project.eyebrow}</span>
+      </p>
+      <h1 id="project-title">
+        <span data-i18n data-en={project.title} data-zh={projectZh.title}>{project.title}</span>
+      </h1>
+      <p>
+        <span data-i18n data-en={project.description} data-zh={projectZh.description}>
+          {project.description}
+        </span>
+      </p>
     </section>
 
     <figure class="project-video">
       <video controls playsinline preload="metadata" poster={project.poster}>
         <source src={project.fullVideo} type="video/mp4" />
+        {
+          project.captions && (
+            <track
+              kind="captions"
+              src={project.captions.src}
+              srclang={project.captions.srclang}
+              label={project.captions.label}
+              default={project.captions.isDefault}
+            />
+          )
+        }
       </video>
-      <figcaption>Full project video</figcaption>
+      <figcaption>
+        <span data-i18n data-en="Full project video" data-zh={zh.common.fullProjectVideo}>
+          Full project video
+        </span>
+      </figcaption>
     </figure>
 
     <div class="project-content">
       <section aria-labelledby="overview-title">
-        <p class="section-label">Overview</p>
-        <h2 id="overview-title">About this work</h2>
-        <p>
-          A detailed introduction covering the research problem, methodology, experiments, and key findings
-          is being prepared.
+        <p class="section-label">
+          <span data-i18n data-en="Overview" data-zh={zh.common.overview}>Overview</span>
         </p>
+        <h2 id="overview-title">
+          <span data-i18n data-en="About this work" data-zh={zh.common.aboutThisWork}>
+            About this work
+          </span>
+        </h2>
+        {
+          project.overview.map((paragraph, index) => (
+            <p>
+              <span data-i18n data-en={paragraph} data-zh={projectZh.overview[index]}>{paragraph}</span>
+            </p>
+          ))
+        }
       </section>
 
       <aside class="project-resources" aria-labelledby="resources-title">
-        <p class="section-label">Resources</p>
-        <h2 id="resources-title">Project links</h2>
+        <p class="section-label">
+          <span data-i18n data-en="Resources" data-zh={zh.common.resources}>Resources</span>
+        </p>
+        <h2 id="resources-title">
+          <span data-i18n data-en="Project links" data-zh={zh.common.projectLinks}>Project links</span>
+        </h2>
         <ul>
-          <li><span>Paper</span><small>Coming soon</small></li>
-          <li><span>Code</span><small>Coming soon</small></li>
-          <li><span>Publication details</span><small>Coming soon</small></li>
+          {
+            project.resources.map((resource, index) => (
+              <li>
+                <span
+                  data-i18n
+                  data-en={resource.label}
+                  data-zh={projectZh.resources[index].label}
+                >
+                  {resource.label}
+                </span>
+                {resource.href ? (
+                  <a href={resource.href} target="_blank" rel="noreferrer">
+                    <span
+                      data-i18n
+                      data-en={resource.value}
+                      data-zh={projectZh.resources[index].value}
+                    >
+                      {resource.value}
+                    </span>
+                  </a>
+                ) : (
+                  <small>
+                    <span
+                      data-i18n
+                      data-en={resource.value}
+                      data-zh={projectZh.resources[index].value}
+                    >
+                      {resource.value}
+                    </span>
+                  </small>
+                )}
+              </li>
+            ))
+          }
         </ul>
       </aside>
     </div>
 
     <section class="project-contact" aria-labelledby="project-contact-title">
       <div>
-        <p class="section-label">Contact</p>
-        <h2 id="project-contact-title">Interested in this work?</h2>
+        <p class="section-label">
+          <span data-i18n data-en="Contact" data-zh={zh.common.contact}>Contact</span>
+        </p>
+        <h2 id="project-contact-title">
+          <span data-i18n data-en="Interested in this work?" data-zh={zh.common.interested}>
+            Interested in this work?
+          </span>
+        </h2>
       </div>
       <a href={`mailto:${profile.email}`}>
         {profile.email} <SocialIcon name="arrow" />
@@ -73,7 +163,14 @@ const pageDescription = `${project.title} — ${project.description}`;
   </main>
 
   <footer class="shell">
-    <p>© {new Date().getFullYear()} {profile.name}</p>
-    <p>Built with Astro · Hosted on GitHub Pages</p>
+    <p>
+      © {new Date().getFullYear()}{" "}
+      <span data-i18n data-en={profile.name} data-zh={zh.profile.name}>{profile.name}</span>
+    </p>
+    <p>
+      <span data-i18n data-en="Built with Astro · Hosted on GitHub Pages" data-zh={zh.common.builtWith}>
+        Built with Astro · Hosted on GitHub Pages
+      </span>
+    </p>
   </footer>
 </BaseLayout>

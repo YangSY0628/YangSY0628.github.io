@@ -10,6 +10,11 @@
   --serif: "Source Serif 4", Georgia, serif;
 }
 
+html[data-language="zh"] {
+  --sans: -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  --serif: "Noto Serif SC", "Songti SC", "STSong", serif;
+}
+
 *,
 *::before,
 *::after {
@@ -56,12 +61,51 @@ a:focus-visible {
   margin-inline: auto;
 }
 
+.language-switch {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+}
+
+.language-switch button {
+  min-width: 2.65rem;
+  padding: 0.3rem 0.55rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.language-switch button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--surface);
+}
+
+.language-switch button:hover:not([aria-pressed="true"]) {
+  color: var(--ink);
+}
+
 .intro {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 11.5rem;
   align-items: start;
   gap: clamp(2rem, 7vw, 5rem);
   padding-top: clamp(3.25rem, 8vw, 5.75rem);
+}
+
+.intro > .language-switch {
+  position: absolute;
+  top: 1.25rem;
+  right: 0;
 }
 
 .eyebrow,
@@ -127,33 +171,14 @@ a:focus-visible {
   font-size: 0.76rem;
 }
 
-.portrait-placeholder {
+.portrait {
   width: 11.5rem;
+  height: auto;
   aspect-ratio: 4 / 5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
+  display: block;
+  object-fit: cover;
   border-radius: 0.75rem;
-  background:
-    radial-gradient(circle at 72% 24%, rgba(255, 255, 255, 0.22) 0 13%, transparent 14%),
-    linear-gradient(145deg, #3c7062, #183d33);
-  color: #fffdf7;
-}
-
-.portrait-placeholder span {
-  font-family: var(--serif);
-  font-size: 4rem;
-  letter-spacing: -0.08em;
-  line-height: 1;
-}
-
-.portrait-placeholder small {
-  color: rgba(255, 255, 255, 0.58);
-  font-size: 0.56rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  box-shadow: 0 0.8rem 2rem rgba(23, 33, 29, 0.12);
 }
 
 .work {
@@ -308,6 +333,39 @@ a:focus-visible {
   font-weight: 500;
 }
 
+.item-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0.6rem 0 0;
+}
+
+.item-links a {
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+}
+
+.item-links a:hover {
+  border-bottom-color: var(--accent);
+}
+
+.panel-group + .panel-group {
+  margin-top: 2.75rem;
+}
+
+.panel-group .item-list {
+  margin-top: 0.9rem;
+}
+
+.panel-note {
+  max-width: 40rem;
+  margin: 1.6rem 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
 .video-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -449,6 +507,12 @@ a:focus-visible {
   border-bottom: 1px solid var(--line);
 }
 
+.project-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .back-link,
 .project-wordmark {
   font-size: 0.78rem;
@@ -533,7 +597,7 @@ a:focus-visible {
   line-height: 1.1;
 }
 
-.project-content section > p:last-child {
+.project-content section > p {
   margin: 1rem 0 0;
   color: var(--muted);
 }
@@ -558,6 +622,17 @@ a:focus-visible {
 .project-resources small {
   color: var(--muted);
   font-size: 0.67rem;
+}
+
+.project-resources a {
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+}
+
+.project-resources a:hover {
+  border-bottom-color: var(--accent);
 }
 
 .project-contact {
@@ -608,19 +683,15 @@ footer p {
   .intro {
     grid-template-columns: minmax(0, 1fr) 7.5rem;
     gap: 1.25rem;
-    padding-top: 2.5rem;
+    padding-top: 4.4rem;
   }
 
-  .portrait-placeholder {
+  .intro > .language-switch {
+    top: 1rem;
+  }
+
+  .portrait {
     width: 7.5rem;
-  }
-
-  .portrait-placeholder span {
-    font-size: 2.6rem;
-  }
-
-  .portrait-placeholder small {
-    display: none;
   }
 
   .empty-panel {
@@ -680,7 +751,7 @@ footer p {
     grid-column: 1;
   }
 
-  .portrait-placeholder {
+  .portrait {
     width: 6.5rem;
     grid-row: 2 / span 3;
     justify-self: end;
